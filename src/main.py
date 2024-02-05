@@ -1,15 +1,7 @@
-# import logging
 import uvicorn
 
 from fastapi import FastAPI
 from src.router import router
-
-
-# logging.basicConfig(
-#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#     level=logging.INFO
-# )
-# logger = logging.getLogger()
 
 
 app = FastAPI(
