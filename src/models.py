@@ -89,7 +89,7 @@ fake = Faker()
 async def create_test_data():
     logger.info('Старт создания тестовых данных')
     for azs_id in range(10001):
-        tel_number = fake.phone_number()
+        tel_number = fake.phone_number()[20:]
         coords = f'{fake.latitude()}, {fake.longitude()}'
         address = fake.address()
         images = [fake.image_url() for _ in range(random.randint(1, 5))]
