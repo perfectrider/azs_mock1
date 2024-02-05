@@ -1,0 +1,28 @@
+version: "3.6"
+
+services:
+
+#  ttnft_mock_1:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: ttnft.mock_1
+#    ports:
+#      - "8001:8000"
+
+  postgres_db:
+    container_name: ttnft.mock.db
+    image: postgres:12
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - db.data:/var/lib/postgresql/data
+    ports:
+      - 5532:5432
+
+volumes:
+  db.data:
+    name: ttnft.mock.db
