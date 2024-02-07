@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Union
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -9,19 +9,30 @@ from src.schemas import AZSAllMainInfoModel, AZSFuelInfoModel, FuelInfo
 router = APIRouter()
 
 
-@router.get('/main_info', response_model=List[AZSAllMainInfoModel])
-async def get_main_info(db: Session = Depends(get_session)):
-    q = db.query(AZSMainInfo)
+@router.get('/main_info', response_model=Union[List[AZSAllMainInfoModel] | AZSAllMainInfoModel])
+async def get_main_info(db: Session = Depends(get_session),
+                        azs_id: Optional[int] = None):
+    if azs_id:
+        q = db.query(AZSMainInfo).filter(AZSMainInfo.id == azs_id).first()
+        return AZSAllMainInfoModel.from_orm(q)
+
+    q = db.query(AZSMainInfo).all()
     azs_main_objects = []
-    for obj in q.all():
+    for obj in q:
         _ = AZSAllMainInfoModel.from_orm(obj)
         azs_main_objects.append(_)
     return azs_main_objects
 
-@router.get('/fuel_info', response_model=List[AZSFuelInfoModel])
-async def get_fuel_info(db: Session = Depends(get_session)):
 
-    q = db.query(AZSFuelInfo).all()
+@router.get('/fuel_info', response_model=Union[List[AZSFuelInfoModel] | AZSFuelInfoModel])
+async def get_fuel_info(db: Session = Depends(get_session),
+                        azs_id: Optional[int] = None):
+
+    if azs_id:
+        q = db.query(AZSFuelInfo).filter(AZSFuelInfo.id == azs_id)
+    else:
+        q = db.query(AZSFuelInfo).all()
+
     for azs_fuel_info in q:
         fuels = db.query(Fuel).filter(Fuel.location == azs_fuel_info.id).all()
         fuel_data_list = []
@@ -36,7 +47,8 @@ async def get_fuel_info(db: Session = Depends(get_session)):
         _ = AZSFuelInfoModel.from_orm(obj)
         azs_fuel_objects.append(_)
 
-    return azs_fuel_objects
+    adjusted = azs_fuel_objects[0] if azs_id else azs_fuel_objects
+    return adjusted
 
 
 @router.post('/createdata')
