@@ -51,6 +51,16 @@ async def get_fuel_info(db: Session = Depends(get_session),
     return adjusted
 
 
+@router.post('/create_main_info')
+async def create_main_info(**kwargs):
+    pass
+
+
+@router.post('/create_fuel_info')
+async def create_main_info(**kwargs):
+    pass
+
+
 @router.post('/createdata')
 async def create_data() -> str:
     await create_test_data()
