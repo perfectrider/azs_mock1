@@ -72,6 +72,7 @@ class Fuel(Base):
     location = Column(ForeignKey('azs_fuel_info.id', ondelete='CASCADE'), comment='Топливо текущей заправки')
 
 
+# TODO: Вынести в отдельный модуль orm
 async def create_azs_info(db: Session, azs_obj: AZSMainInfo | AZSFuelInfo):
     db.add(azs_obj)
     db.commit()
@@ -82,6 +83,7 @@ async def create_fuel_info(db: Session, fuel_obj: Fuel):
     db.commit()
 
 
+# TODO: вынести в отдельный модуль
 fake = Faker()
 
 fuel_prices = {

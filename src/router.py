@@ -12,6 +12,7 @@ router = APIRouter()
 @router.get('/main_info', response_model=Union[List[AZSAllMainInfoModel] | AZSAllMainInfoModel])
 async def get_main_info(db: Session = Depends(get_session),
                         azs_id: Optional[int] = None):
+    # TODO: Вынести в отдельный модуль orm
     if azs_id:
         q = db.query(AZSMainInfo).filter(AZSMainInfo.id == azs_id).first()
         return AZSAllMainInfoModel.from_orm(q)
@@ -28,6 +29,7 @@ async def get_main_info(db: Session = Depends(get_session),
 async def get_fuel_info(db: Session = Depends(get_session),
                         azs_id: Optional[int] = None):
 
+    # TODO: Вынести в отдельный модуль orm
     if azs_id:
         q = db.query(AZSFuelInfo).filter(AZSFuelInfo.id == azs_id)
     else:
@@ -61,6 +63,7 @@ async def create_main_info(**kwargs):
     pass
 
 
+# TODO: добавить проверку на пустую БД
 @router.post('/createdata')
 async def create_data() -> str:
     await create_test_data()
